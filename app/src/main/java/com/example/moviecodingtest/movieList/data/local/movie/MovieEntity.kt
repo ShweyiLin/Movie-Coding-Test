@@ -3,11 +3,8 @@ package com.example.moviecodingtest.movieList.data.local.movie
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-/**
- * @author Android Devs Academy (Ahmed Guedmioui)
- */
 @Entity
-data class MovieEntity (
+data class MovieEntity(
     val adult: Boolean,
     val backdrop_path: String,
     val genre_ids: String,
@@ -24,6 +21,6 @@ data class MovieEntity (
 
     @PrimaryKey
     val id: Int,
-    val category: String,
 
-    )
+    val category: String,
+)

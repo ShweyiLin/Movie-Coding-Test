@@ -1,6 +1,5 @@
 package com.example.moviecodingtest.movieList.data.repository
 
-import android.net.http.HttpException
 import com.example.moviecodingtest.movieList.data.local.movie.MovieDatabase
 import com.example.moviecodingtest.movieList.data.mappers.toMovie
 import com.example.moviecodingtest.movieList.data.mappers.toMovieEntity
@@ -11,12 +10,14 @@ import com.example.moviecodingtest.movieList.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okio.IOException
+import retrofit2.HttpException
 import javax.inject.Inject
 
-class MovieListRepositoryImpl  @Inject constructor(
+class MovieListRepositoryImpl @Inject constructor(
     private val movieApi: MovieApi,
     private val movieDatabase: MovieDatabase
-):MovieListRepository {
+) : MovieListRepository {
+
     override suspend fun getMovieList(
         forceFetchFromRemote: Boolean,
         category: String,
@@ -47,6 +48,10 @@ class MovieListRepositoryImpl  @Inject constructor(
                 e.printStackTrace()
                 emit(Resource.Error(message = "Error loading movies"))
                 return@flow
+            } catch (e: HttpException) {
+                e.printStackTrace()
+                emit(Resource.Error(message = "Error loading movies"))
+                return@flow
             } catch (e: Exception) {
                 e.printStackTrace()
                 emit(Resource.Error(message = "Error loading movies"))
@@ -67,7 +72,6 @@ class MovieListRepositoryImpl  @Inject constructor(
             emit(Resource.Loading(false))
 
         }
-        TODO("Not yet implemented")
     }
 
     override suspend fun getMovie(id: Int): Flow<Resource<Movie>> {
@@ -92,6 +96,5 @@ class MovieListRepositoryImpl  @Inject constructor(
 
 
         }
-        TODO("Not yet implemented")
     }
 }

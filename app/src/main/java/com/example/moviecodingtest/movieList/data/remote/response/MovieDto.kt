@@ -1,5 +1,4 @@
 package com.example.moviecodingtest.movieList.data.remote.response
-
 data class MovieDto(
     val adult: Boolean?,
     val backdrop_path: String?,

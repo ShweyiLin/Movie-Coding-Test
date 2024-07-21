@@ -21,6 +21,7 @@ fun MovieDto.toMovieEntity(
         id = id ?: -1,
         original_title = original_title ?: "",
         video = video ?: false,
+
         category = category,
 
         genre_ids = try {
@@ -30,7 +31,6 @@ fun MovieDto.toMovieEntity(
         }
     )
 }
-
 
 fun MovieEntity.toMovie(
     category: String
