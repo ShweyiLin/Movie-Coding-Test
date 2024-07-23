@@ -16,14 +16,15 @@ import androidx.navigation.NavHostController
 import com.example.moviecodingtest.movieList.presentation.componentes.MovieItem
 import com.example.moviecodingtest.movieList.util.Category
 
+
 @Composable
-fun PopularMoviesScreen(
+fun NowPlayingMovieScreen(
     movieListState: MovieListState,
     navController: NavHostController,
     onEvent: (MovieListUiEvent) -> Unit
 ) {
 
-    if (movieListState.popularMovieList.isEmpty()) {
+    if (movieListState.nowPlayingMovieList.isEmpty()) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -32,25 +33,22 @@ fun PopularMoviesScreen(
         }
     } else {
         LazyHorizontalGrid(
-
             rows = GridCells.Fixed(1),
             modifier = Modifier.height(320.dp),
-            contentPadding = PaddingValues(vertical = 4.dp, horizontal = 8.dp),
-
+            contentPadding = PaddingValues(vertical = 4.dp, horizontal = 8.dp)
         ) {
-            items(movieListState.popularMovieList.size) { index ->
+            items(movieListState.nowPlayingMovieList.size) { index ->
                 MovieItem(
-                    movie = movieListState.popularMovieList[index],
+                    movie = movieListState.nowPlayingMovieList[index],
                     navHostController = navController
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 
-                if (index >= movieListState.popularMovieList.size - 1 && !movieListState.isLoading) {
-                    onEvent(MovieListUiEvent.Paginate(Category.POPULAR))
+                if (index >= movieListState.nowPlayingMovieList.size - 1 && !movieListState.isLoading) {
+                    onEvent(MovieListUiEvent.Paginate(Category.NOWPLAYING))
                 }
 
             }
         }
     }
-
 }

@@ -1,5 +1,7 @@
 package com.example.moviecodingtest.di
 
+import com.example.moviecodingtest.details.data.repository.DetailListRepositoryImpl
+import com.example.moviecodingtest.details.domain.repository.DetailListRepository
 import com.example.moviecodingtest.movieList.data.repository.MovieListRepositoryImpl
 import com.example.moviecodingtest.movieList.domain.repository.MovieListRepository
 import dagger.Binds
@@ -18,4 +20,9 @@ abstract class RepositoryModule {
         movieListRepositoryImpl: MovieListRepositoryImpl
     ): MovieListRepository
 
+    @Binds
+    @Singleton
+    abstract fun bindDetailListRepository(
+        detailListRepositoryImpl: DetailListRepositoryImpl
+    ): DetailListRepository
 }

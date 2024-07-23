@@ -4,7 +4,6 @@ import com.example.moviecodingtest.movieList.domain.model.Movie
 import com.example.moviecodingtest.movieList.util.Resource
 import kotlinx.coroutines.flow.Flow
 
-
 interface MovieListRepository {
     suspend fun getMovieList(
         forceFetchFromRemote: Boolean,

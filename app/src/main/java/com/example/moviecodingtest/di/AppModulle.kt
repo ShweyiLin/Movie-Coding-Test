@@ -2,6 +2,7 @@ package com.example.moviecodingtest.di
 
 import android.app.Application
 import androidx.room.Room
+import com.example.moviecodingtest.details.data.remote.DetailApi
 import com.example.moviecodingtest.movieList.data.local.movie.MovieDatabase
 import com.example.moviecodingtest.movieList.data.remote.MovieApi
 import dagger.Module
@@ -37,6 +38,16 @@ object AppModule {
             .create(MovieApi::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun providesDetailApi() : DetailApi {
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(DetailApi.BASE_URL)
+            .client(client)
+            .build()
+            .create(DetailApi::class.java)
+    }
     @Provides
     @Singleton
     fun providesMovieDatabase(app: Application): MovieDatabase {

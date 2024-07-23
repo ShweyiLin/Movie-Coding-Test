@@ -6,6 +6,11 @@ data class MovieListState(
     val isLoading: Boolean = false,
 
     val popularMovieListPage: Int = 1,
+    val upComingMovieListPage: Int = 1,
+    val nowPlayingMovieListPage: Int = 1,
 
     val popularMovieList: List<Movie> = emptyList(),
-)
+    val upComingMovieList: List<Movie> = emptyList(),
+    val nowPlayingMovieList: List<Movie> = emptyList(),
+
+    )

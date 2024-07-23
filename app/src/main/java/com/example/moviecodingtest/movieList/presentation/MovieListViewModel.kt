@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @HiltViewModel
 class MovieListViewModel @Inject constructor(
     private val movieListRepository: MovieListRepository
@@ -21,12 +22,20 @@ class MovieListViewModel @Inject constructor(
 
     init {
         getPopularMovieList(false)
+        getUpComingMovieList(false)
+        getNowPlayingMovieList(false)
     }
 
     fun onEvent(event: MovieListUiEvent) {
         when (event) {
             is MovieListUiEvent.Paginate -> {
-                getPopularMovieList(true)
+                if (event.category == Category.POPULAR) {
+                    getPopularMovieList(true)
+                } else if (event.category == Category.UPCOMING) {
+                    getUpComingMovieList(true)
+                } else if(event.category == Category.NOWPLAYING) {
+                    getNowPlayingMovieList(true)
+                }
             }
         }
     }
@@ -54,7 +63,7 @@ class MovieListViewModel @Inject constructor(
                             _movieListState.update {
                                 it.copy(
                                     popularMovieList = movieListState.value.popularMovieList
-                                            + popularList.shuffled(),
+                                            + popularList,
                                     popularMovieListPage = movieListState.value.popularMovieListPage + 1
                                 )
                             }
@@ -71,4 +80,83 @@ class MovieListViewModel @Inject constructor(
         }
     }
 
+    private fun getUpComingMovieList(forceFetchFromRemote: Boolean) {
+        viewModelScope.launch {
+            _movieListState.update {
+                it.copy(isLoading = true)
+            }
+
+            movieListRepository.getMovieList(
+                forceFetchFromRemote,
+                Category.UPCOMING,
+                movieListState.value.upComingMovieListPage
+            ).collectLatest { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        _movieListState.update {
+                            it.copy(isLoading = false)
+                        }
+                    }
+
+                    is Resource.Success -> {
+                        result.data?.let { upComingList ->
+                            _movieListState.update {
+                                it.copy(
+                                    upComingMovieList = movieListState.value.upComingMovieList
+                                            + upComingList,
+                                    upComingMovieListPage = movieListState.value.upComingMovieListPage + 1
+                                )
+                            }
+                        }
+                    }
+
+                    is Resource.Loading -> {
+                        _movieListState.update {
+                            it.copy(isLoading = result.isLoading)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getNowPlayingMovieList(forceFetchFromRemote: Boolean) {
+        viewModelScope.launch {
+            _movieListState.update {
+                it.copy(isLoading = true)
+            }
+
+            movieListRepository.getMovieList(
+                forceFetchFromRemote,
+                Category.NOWPLAYING,
+                movieListState.value.nowPlayingMovieListPage
+            ).collectLatest { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        _movieListState.update {
+                            it.copy(isLoading = false)
+                        }
+                    }
+
+                    is Resource.Success -> {
+                        result.data?.let { popularList ->
+                            _movieListState.update {
+                                it.copy(
+                                    nowPlayingMovieList = movieListState.value.nowPlayingMovieList
+                                            + popularList,
+                                    nowPlayingMovieListPage = movieListState.value.nowPlayingMovieListPage + 1
+                                )
+                            }
+                        }
+                    }
+
+                    is Resource.Loading -> {
+                        _movieListState.update {
+                            it.copy(isLoading = result.isLoading)
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

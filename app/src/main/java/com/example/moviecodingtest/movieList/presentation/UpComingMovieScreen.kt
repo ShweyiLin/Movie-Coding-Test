@@ -17,13 +17,13 @@ import com.example.moviecodingtest.movieList.presentation.componentes.MovieItem
 import com.example.moviecodingtest.movieList.util.Category
 
 @Composable
-fun PopularMoviesScreen(
+fun UpComingMovieScreen(
     movieListState: MovieListState,
     navController: NavHostController,
     onEvent: (MovieListUiEvent) -> Unit
 ) {
 
-    if (movieListState.popularMovieList.isEmpty()) {
+    if (movieListState.upComingMovieList.isEmpty()) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -32,25 +32,29 @@ fun PopularMoviesScreen(
         }
     } else {
         LazyHorizontalGrid(
-
             rows = GridCells.Fixed(1),
             modifier = Modifier.height(320.dp),
             contentPadding = PaddingValues(vertical = 4.dp, horizontal = 8.dp),
-
+            userScrollEnabled= true
         ) {
-            items(movieListState.popularMovieList.size) { index ->
+            items(movieListState.upComingMovieList.size) { index ->
                 MovieItem(
-                    movie = movieListState.popularMovieList[index],
+                    movie = movieListState.upComingMovieList[index],
                     navHostController = navController
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 
-                if (index >= movieListState.popularMovieList.size - 1 && !movieListState.isLoading) {
-                    onEvent(MovieListUiEvent.Paginate(Category.POPULAR))
+                if (index >= movieListState.upComingMovieList.size - 1 && !movieListState.isLoading) {
+                    onEvent(MovieListUiEvent.Paginate(Category.UPCOMING))
                 }
 
             }
         }
     }
-
 }
+
+
+
+
+
+

@@ -15,6 +15,7 @@ interface MovieApi {
         @Query("api_key") apiKey: String = API_KEY
     ): MovieListDto
 
+
     companion object {
         const val API_KEY = "9165b14cb98b2ae3e429f266a8abc428"
         const val BASE_URL = "https://api.themoviedb.org/3/"
